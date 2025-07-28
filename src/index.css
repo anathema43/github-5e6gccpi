@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+
+/* CSS Custom Properties for Organic Color System */
+:root {
+  --organic-background: #FDFBF6;
+  --organic-primary: #B97D4B;
+  --organic-text: #333333;
+  --organic-highlight: #5E8C31;
+  --organic-white: #FFFFFF;
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--organic-background);
+    color: var(--organic-text);
+    min-height: 100vh;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--organic-background);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--organic-primary);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--organic-text);
+  }
+
+  /* Organic button styles */
+  .btn-primary {
+    @apply bg-organic-primary text-organic-white font-semibold px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-200 hover:opacity-90;
+  }
+  
+  .btn-secondary {
+    @apply border border-organic-text text-organic-text font-semibold px-6 py-3 rounded-lg hover:bg-organic-text hover:text-organic-white transition-all duration-200 bg-transparent;
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  /* Organic highlight text */
+  .text-highlight {
+    @apply text-organic-highlight font-medium;
+  }
+
+  /* Loading animation */
+  .loading-spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-organic-primary;
+  }
+
+  /* Text truncation utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Focus states for accessibility */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-organic-primary focus:ring-offset-2;
+  }
+}
+
+@layer utilities {
+  /* Animation delays */
+  .animate-delay-100 {
+    animation-delay: 0.1s;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 0.2s;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 0.3s;
+  }
+  
+  .animate-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  /* Backdrop blur utilities */
+  .backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+  }
+}
