@@ -18,11 +18,11 @@ const firebaseConfig = {
 
 // Check if Firebase is properly configured
 const isFirebaseConfigured = Object.values(firebaseConfig).every(value => 
-  value && value !== 'undefined' && !value.includes('placeholder')
+  value && value !== 'undefined' && value !== '' && !value.includes('placeholder') && !value.includes('your_')
 );
 
 if (!isFirebaseConfigured) {
-  console.warn('Firebase configuration is incomplete. Please check your .env file.');
+  console.warn('⚠️ Firebase configuration is incomplete. Please check your .env file and ensure all VITE_FIREBASE_* variables are set.');
 }
 
 // Initialize Firebase

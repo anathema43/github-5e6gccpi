@@ -1,9 +1,9 @@
-# 🚀 Complete Setup Guide: Firebase + Stripe + Deployment
+# 🚀 Complete Setup Guide: Firebase + Razorpay + Deployment
 *Estimated Total Time: 6-8 hours over 2 days*
 
 ## 📅 **2-Day Timeline Overview**
 - **Day 1 (4-5 hours)**: Firebase setup, basic testing
-- **Day 2 (2-3 hours)**: Stripe integration, deployment
+- **Day 2 (2-3 hours)**: Razorpay integration, deployment
 
 ---
 
@@ -121,8 +121,8 @@ VITE_FIREBASE_STORAGE_BUCKET=ramro-ecommerce.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 
-# Stripe Configuration (we'll add this tomorrow)
-VITE_STRIPE_PUBLISHABLE_KEY=pk_test_placeholder
+# Razorpay Configuration (we'll add this tomorrow)
+VITE_RAZORPAY_KEY_ID=rzp_test_placeholder
 
 # Environment
 VITE_NODE_ENV=development
@@ -219,89 +219,83 @@ service cloud.firestore {
 
 ---
 
-# 💳 **DAY 2: STRIPE INTEGRATION**
+# 💳 **DAY 2: RAZORPAY INTEGRATION**
 
-## **Step 8: Create Stripe Account** *(20 minutes)*
+## **Step 8: Create Razorpay Account** *(20 minutes)*
 
-### 8.1 Sign Up for Stripe
-1. Go to [https://stripe.com/](https://stripe.com/)
-2. Click **"Start now"**
+### 8.1 Sign Up for Razorpay
+1. Go to [https://razorpay.com/](https://razorpay.com/)
+2. Click **"Sign Up"**
 3. Enter your email and create password
 4. Verify your email address
 5. Complete business information (you can use personal info for testing)
 
 ### 8.2 Activate Test Mode
-1. In Stripe Dashboard, ensure you're in **"Test mode"** (toggle in left sidebar)
+1. In Razorpay Dashboard, ensure you're in **"Test mode"** (toggle in left sidebar)
 2. You should see "Test mode" indicator at the top
 
 ### 8.3 Get API Keys
-1. Go to **"Developers"** > **"API keys"**
-2. Copy **"Publishable key"** (starts with `pk_test_`)
-3. Click **"Reveal test key"** for **"Secret key"** (starts with `sk_test_`)
+1. Go to **"Settings"** > **"API Keys"**
+2. Copy **"Key ID"** (starts with `rzp_test_`)
+3. Click **"Generate Key"** if needed and copy **"Key Secret"**
 4. **Save both keys securely**
 
 ---
 
-## **Step 9: Configure Stripe in Your App** *(30 minutes)*
+## **Step 9: Configure Razorpay in Your App** *(30 minutes)*
 
 ### 9.1 Update Environment Variables
 1. Open your `.env` file
-2. Replace the Stripe placeholder:
+2. Replace the Razorpay placeholder:
 ```env
-VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_actual_key_here
+VITE_RAZORPAY_KEY_ID=rzp_test_your_actual_key_here
 ```
 
-### 9.2 Install Stripe Dependencies
-1. Open terminal in your project
-2. Run: `npm install @stripe/stripe-js @stripe/react-stripe-js`
-3. Wait for installation to complete
 
-### 9.3 Test Stripe Integration
+### 9.2 Test Razorpay Integration
 1. Restart your dev server: `npm run dev`
 2. Add items to cart
 3. Go to checkout
-4. Select "Credit/Debit Card" payment method
+4. Select "Razorpay" payment method
 5. Fill in shipping information
 6. Click "Proceed to Payment"
 
 **Test Card Numbers:**
-- Success: `4242 4242 4242 4242`
+- Success: `4111 1111 1111 1111`
 - Expiry: Any future date (e.g., `12/25`)
-- CVC: Any 3 digits (e.g., `123`)
+- CVV: Any 3 digits (e.g., `123`)
+- **Test UPI ID**: `success@razorpay`
 
 ---
 
 ## **Step 10: Set Up Webhooks** *(45 minutes)*
 
-### 10.1 Install Stripe CLI (for testing)
+### 10.1 Set Up Razorpay Webhooks
 **Windows:**
-1. Download from [https://github.com/stripe/stripe-cli/releases](https://github.com/stripe/stripe-cli/releases)
-2. Extract and add to PATH
+1. Go to Razorpay Dashboard > Settings > Webhooks
+2. Click "Create Webhook"
 
 **Mac:**
-```bash
-brew install stripe/stripe-cli/stripe
-```
+1. Go to Razorpay Dashboard > Settings > Webhooks
+2. Click "Create Webhook"
 
 **Linux:**
-```bash
-wget https://github.com/stripe/stripe-cli/releases/latest/download/stripe_1.8.0_linux_x86_64.tar.gz
-tar -xvf stripe_1.8.0_linux_x86_64.tar.gz
-sudo mv stripe /usr/local/bin
-```
+1. Go to Razorpay Dashboard > Settings > Webhooks
+2. Click "Create Webhook"
 
-### 10.2 Login to Stripe CLI
-1. Run: `stripe login`
-2. Press Enter to open browser
-3. Allow access in Stripe Dashboard
-4. Return to terminal
+### 10.2 Configure Webhook
+1. **Webhook URL**: `https://your-domain.com/api/razorpay/webhook`
+2. **Select Events**:
+   - `payment.captured`
+   - `payment.failed`
+   - `refund.created`
+3. Click **"Create Webhook"**
+4. Copy the **Webhook Secret** (starts with `whsec_`)
 
-### 10.3 Test Webhook Locally
-1. In terminal, run: `stripe listen --forward-to localhost:3000/webhook`
-2. Copy the webhook signing secret (starts with `whsec_`)
+### 10.3 Save Webhook Secret
 3. Add to `.env`:
 ```env
-STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
+VITE_RAZORPAY_WEBHOOK_SECRET=whsec_your_secret_here
 ```
 
 ---
@@ -342,7 +336,7 @@ STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
    - `VITE_FIREBASE_STORAGE_BUCKET`
    - `VITE_FIREBASE_MESSAGING_SENDER_ID`
    - `VITE_FIREBASE_APP_ID`
-   - `VITE_STRIPE_PUBLISHABLE_KEY`
+   - `VITE_RAZORPAY_KEY_ID`
 
 ### 12.2 Redeploy Site
 1. Go to **"Deploys"** tab
@@ -354,19 +348,20 @@ STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
 ## **Step 13: Configure Production Webhooks** *(30 minutes)*
 
 ### 13.1 Create Production Webhook
-1. In Stripe Dashboard, go to **"Developers"** > **"Webhooks"**
+1. In Razorpay Dashboard, go to **"Settings"** > **"Webhooks"**
 2. Click **"Add endpoint"**
-3. Endpoint URL: `https://your-netlify-site.netlify.app/api/webhook`
+3. Endpoint URL: `https://your-netlify-site.netlify.app/api/razorpay/webhook`
 4. Select events:
-   - `payment_intent.succeeded`
-   - `payment_intent.payment_failed`
+   - `payment.captured`
+   - `payment.failed`
+   - `refund.created`
 5. Click **"Add endpoint"**
 
 ### 13.2 Get Production Webhook Secret
 1. Click on your new webhook
 2. Click **"Reveal"** next to "Signing secret"
 3. Copy the secret (starts with `whsec_`)
-4. Add to Netlify environment variables as `STRIPE_WEBHOOK_SECRET`
+4. Add to Netlify environment variables as `VITE_RAZORPAY_WEBHOOK_SECRET`
 
 ---
 
@@ -378,7 +373,7 @@ STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
 3. Browse products
 4. Add items to cart
 5. Complete checkout with test card
-6. Check Stripe Dashboard for successful payment
+6. Check Razorpay Dashboard for successful payment
 7. Verify order appears in Firebase
 
 ### 14.2 Test Admin Functions
@@ -393,7 +388,7 @@ STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
 
 ## **Before Going Live:**
 - [ ] Update Firestore rules to production-ready
-- [ ] Switch Stripe to live mode (when ready for real payments)
+- [ ] Switch Razorpay to live mode (when ready for real payments)
 - [ ] Set up proper error monitoring
 - [ ] Configure HTTPS (Netlify does this automatically)
 - [ ] Review Firebase security rules
@@ -408,9 +403,9 @@ STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
 - **"Firebase not configured"**: Verify `.env` variables and restart dev server
 - **"User not found"**: Ensure user is signed in and has proper permissions
 
-## **Stripe Issues:**
+## **Razorpay Issues:**
 - **"Invalid API key"**: Check you're using the correct test/live keys
-- **"Payment failed"**: Use test card numbers, check Stripe Dashboard logs
+- **"Payment failed"**: Use test card numbers, check Razorpay Dashboard logs
 - **"Webhook not working"**: Verify endpoint URL and signing secret
 
 ## **Deployment Issues:**
@@ -423,7 +418,7 @@ STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
 # 📞 **SUPPORT RESOURCES**
 
 - **Firebase Documentation**: [https://firebase.google.com/docs](https://firebase.google.com/docs)
-- **Stripe Documentation**: [https://stripe.com/docs](https://stripe.com/docs)
+- **Razorpay Documentation**: [https://razorpay.com/docs](https://razorpay.com/docs)
 - **Netlify Documentation**: [https://docs.netlify.com/](https://docs.netlify.com/)
 
 ---
@@ -433,7 +428,7 @@ STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
 If you've followed all steps, you now have:
 - ✅ A fully functional e-commerce app
 - ✅ Firebase backend with authentication and database
-- ✅ Stripe payment processing
+- ✅ Razorpay payment processing
 - ✅ Live deployment on the internet
 - ✅ Admin panel for managing products
 

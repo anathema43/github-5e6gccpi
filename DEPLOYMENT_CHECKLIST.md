@@ -13,7 +13,7 @@
 
 ### ✅ **Environment Configuration**
 - [ ] All Firebase environment variables set in `.env`
-- [ ] Stripe publishable key configured
+- [ ] Razorpay key ID configured
 - [ ] No placeholder values in environment variables
 - [ ] Firebase project created and configured
 - [ ] Firestore security rules published
@@ -25,8 +25,8 @@
 - [ ] Admin user created with custom claims
 - [ ] Test data seeded successfully
 
-### ✅ **Stripe Setup**
-- [ ] Stripe account created
+### ✅ **Razorpay Setup**
+- [ ] Razorpay account created
 - [ ] Test mode enabled
 - [ ] API keys obtained and configured
 - [ ] Test payments working locally
@@ -81,8 +81,8 @@
 - [ ] HTTPS enabled (automatic with most platforms)
 - [ ] Environment variables secure
 
-### ✅ **Stripe Live Mode** (When Ready)
-- [ ] Business verification complete in Stripe
+### ✅ **Razorpay Live Mode** (When Ready)
+- [ ] Business verification complete in Razorpay
 - [ ] Switch to live API keys
 - [ ] Update webhook endpoints for production
 - [ ] Test with real payment methods
@@ -104,10 +104,10 @@
 - Check Firebase project settings
 - Ensure security rules are published
 
-### **Stripe Payment Issues**
-- Verify Stripe keys are correct
+### **Razorpay Payment Issues**
+- Verify Razorpay keys are correct
 - Check test card numbers are being used
-- Review Stripe dashboard for error logs
+- Review Razorpay dashboard for error logs
 
 ### **Deployment Platform Issues**
 - Clear build cache and redeploy

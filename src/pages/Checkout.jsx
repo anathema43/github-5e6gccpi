@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/cartStore";
 import { useOrderStore } from "../store/orderStore";
 import { useAuthStore } from "../store/authStore";
-import StripeCheckout from "../components/StripeCheckout";
+import RazorpayCheckout from "../components/RazorpayCheckout";
 import formatCurrency from "../utils/formatCurrency";
 import LoadingSpinner from "../components/LoadingSpinner";
 import emailService from "../services/emailService";
@@ -86,7 +86,7 @@ export default function Checkout() {
     try {
       const orderData = {
         items: cart,
-        shipping: {
+        shippingInfo: {
           firstName: formData.firstName,
           lastName: formData.lastName,
           name: `${formData.firstName} ${formData.lastName}`,
@@ -103,7 +103,7 @@ export default function Checkout() {
         },
         subtotal: getSubtotal(),
         tax: getTax(),
-        shipping: getShipping(),
+        shippingCost: getShipping(),
         total: getGrandTotal(),
         orderNotes: formData.orderNotes,
         status: "processing",
@@ -205,10 +205,10 @@ export default function Checkout() {
                 </button>
               </div>
               
-              <StripeCheckout
+              <RazorpayCheckout
                 orderData={{
                   items: cart,
-                  shipping: {
+                  shippingInfo: {
                     firstName: formData.firstName,
                     lastName: formData.lastName,
                     email: formData.email,
@@ -221,7 +221,7 @@ export default function Checkout() {
                   },
                   subtotal: getSubtotal(),
                   tax: getTax(),
-                  shipping: getShipping(),
+                  shippingCost: getShipping(),
                   total: getGrandTotal(),
                   orderNotes: formData.orderNotes
                 }}
@@ -352,7 +352,7 @@ export default function Checkout() {
                         onChange={handleInputChange}
                         className="mr-2"
                       />
-                      Credit/Debit Card
+                      Razorpay (Cards, UPI, Net Banking, Wallets)
                     </label>
                     <label className="flex items-center">
                       <input
@@ -365,84 +365,8 @@ export default function Checkout() {
                       />
                       Cash on Delivery
                     </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="esewa"
-                        checked={formData.paymentMethod === 'esewa'}
-                        onChange={handleInputChange}
-                        className="mr-2"
-                      />
-                      eSewa
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="khalti"
-                        checked={formData.paymentMethod === 'khalti'}
-                        onChange={handleInputChange}
-                        className="mr-2"
-                      />
-                      Khalti
-                    </label>
                   </div>
                 </div>
-
-                {formData.paymentMethod === 'card' && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-organic-text font-medium mb-2">Name on Card *</label>
-                      <input
-                        type="text"
-                        name="nameOnCard"
-                        value={formData.nameOnCard}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-organic-primary focus:border-transparent"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-organic-text font-medium mb-2">Card Number *</label>
-                      <input
-                        type="text"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        placeholder="1234 5678 9012 3456"
-                        className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-organic-primary focus:border-transparent"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-organic-text font-medium mb-2">Expiry Date *</label>
-                        <input
-                          type="text"
-                          name="expiryDate"
-                          value={formData.expiryDate}
-                          onChange={handleInputChange}
-                          placeholder="MM/YY"
-                          className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-organic-primary focus:border-transparent"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-organic-text font-medium mb-2">CVV *</label>
-                        <input
-                          type="text"
-                          name="cvv"
-                          value={formData.cvv}
-                          onChange={handleInputChange}
-                          placeholder="123"
-                          className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-organic-primary focus:border-transparent"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Order Notes */}
